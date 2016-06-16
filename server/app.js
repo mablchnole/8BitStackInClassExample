@@ -57,17 +57,20 @@ app.get( '/getUsers', function( req, res ){
     var callDB = client.query( 'SELECT * FROM users WHERE active=true ORDER BY id DESC;' );
     console.log( "query: " + callDB );
     // push each row in query into our results array
-    var rows = 0;
+
     callDB.on( 'row', function ( row ){
       results.push( row );
     }); // end query push
     callDB.on( 'end', function (){
       return res.json( results );
-    });
+    }); // end onEnd
+    if(err){
+      console.log(err);
+    } // end error
   }); // end connect
-});
+}); // end users get
 
 // spin up server
-app.listen( 8080, 'localhost', function( req, res ){
-  console.log( "server listening on 8080");
+app.listen( 8000, 'localhost', function( req, res ){
+  console.log( "server listening on 8000");
 });

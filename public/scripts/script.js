@@ -1,7 +1,6 @@
 $( document ).ready( function(){
-  $( "#outputDiv" ).on( 'click', '#deactivateButton', function(){
+  $( "#outputUserList" ).on( 'click', '#deactivateButton', function(){
     console.log('inside deactivateButton');
-    // $(this).
     //how do I target just the button and the name its associated to?
         var updateUserId = $(this).attr('data-id');
         console.log("this id = " + updateUserId);
@@ -14,11 +13,12 @@ $( document ).ready( function(){
           url: '/updateUser',
           data: updateUser
         }); // end ajax
+        $('#active').text('false');
   }); // end deactivate button
 
-  $( "#outputDiv" ).on( 'click', '#deleteButton', function(){
+  $( "#outputUserList" ).on( 'click', '#deleteButton', function(){
     console.log('inside deleteButton');
-    // $(this).
+
     //how do I target just the button and the name its associated to?
         var delUserId = $(this).attr('data-id');
         console.log("this id = " + delUserId);
@@ -30,7 +30,7 @@ $( document ).ready( function(){
           url: '/deleteUser',
           data: delUser
         }); // end ajax
-        $(this).remove();
+        // $('#line').remove();
   }); // end deactivate button
 
   $( '#addButton' ).on( 'click', function(){
@@ -48,6 +48,8 @@ $( document ).ready( function(){
       url: '/createNew',
       data: newUser
     }); // end ajax
+    // return and append to dom
+
   }); // end addbutton
 
 
@@ -58,6 +60,7 @@ $( document ).ready( function(){
       url: '/getUsers',
       success: function( data ){
       showUsers( data );
+      console.log('in getUsers data: ' + data);
       } // end success
     }); //end ajax
   });
@@ -66,15 +69,19 @@ $( document ).ready( function(){
     console.log( 'in showUsers:' + users );
     for( i=0; i<users.length; i++ )
     {
-      // var userDiv = "<div>" + userOut + userButton + "</div>";
-      var something = document.createElement('div');
-      var userOut = "<p>" + users[ i ].username + ", active: " + users[ i ].active + " created: " + users[ i ].created + "</p>";
-      something.textContent = userOut;
-      $('body').append( something );
-      var userButton = "<button id='deactivateButton' data-id='" + users[ i ].id + "'>Deactivate " + users[ i ].username + "</button>";
-      $('body').append( userButton );
-      var deleteButton = "<button id='deleteButton' data-id='" + users[ i ].id + "'>Delete " + users[ i ].username + "</button>";
-      $('body').append( deleteButton );
+      $( '#usernameIn' ).val( "" );
+      // document.getElementById('outputUserList').innerHTML = '';
+
+      // var userOut = "<p>" + users[ i ].username + ", active: " + users[ i ].active + " created: " + users[ i ].created + "</p>";
+      // $('#outputDiv').append( userOut );
+      var userButton = "<button class='btn' id='deactivateButton' data-id='" + users[ i ].id + "'>deactivate " + "</button>";
+      // $('#outputDiv').append( userButton );
+      var deleteButton = "<button class='btn' id='deleteButton' data-id='" + users[ i ].id + "'>delete " + "</button>";
+      // $('#outputDiv').append( deleteButton );
+
+      var userLine = '<td>' + users[i].id + '</td>' + '<td>' + users[i].username + '</td>' + '<td id="active">' + users[i].active + '</td>' + '<td>' + users[i].created + '</td>' + '<td>' + userButton + '</td>' + '<td>' + deleteButton + '</td>';
+      document.getElementById('outputUserList').innerHTML += '<tr id="line">' + userLine + '<tr>';
+
     } // end for loop
   } // end show users
 
